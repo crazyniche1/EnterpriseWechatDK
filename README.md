@@ -1,4 +1,4 @@
-通过ADB命令控制手机设备实现启动上下班打卡
+电脑端通过Python脚本控制手机实现上下班打卡
 
 - 说明
 - dkService ：主服务
@@ -9,4 +9,10 @@
 
 
 ** 其它
-Test、ico后缀、spec后缀、build dist是打包exe时自动生成可删除
+- Test、ico后缀、spec后缀、build dist是打包exe时自动生成可删除
+
+** 升级玩法2种
+- 1. 将Python 文件在window的任务计划程序自动执行
+- 2. 手机端安装termux，执行脚本 
+
+
