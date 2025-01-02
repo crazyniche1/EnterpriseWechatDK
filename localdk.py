@@ -281,9 +281,9 @@ def sendEmail ():
     printC('#send email')
 
     # 设置发件人邮箱、密码和收件人邮箱
-    sender_email = 'zhouyu@kattgatt.com'
-    sender_password = 'ZY.mima.123'
-    receiver_email = '2210518393@qq.com'
+    sender_email = '****@qq.com'
+    sender_password = '****'
+    receiver_email = '****@qq.com'
 
     # 设置邮件主题和内容
     subject = "打卡"
