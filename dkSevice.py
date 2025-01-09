@@ -163,7 +163,7 @@ def updatejobtimes():
         printC("#job.name:"+ str(job))
 
 def preventScrDisconn ():
-    scheduler.add_job(task2, 'cron' ,hour='*/2', minute='0' )
+    scheduler.add_job(task2, 'cron' ,hour='*/2', minute='0', replace_existing=True)
 
 
 def electricQuantity():

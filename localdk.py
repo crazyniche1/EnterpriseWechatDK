@@ -4,6 +4,7 @@ from datetime import datetime, time, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
 import smtplib
+import imaplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -14,6 +15,7 @@ import localLog
 import subprocess
 import localBatteryLevel as batteryLevel
 import uiautomator2 as u2
+
 
 def printC (_str):
     current_time = getCurrentTime ()
@@ -28,6 +30,18 @@ def getCurrentTime ():
 
 def getCurrentTimeStr ():
     return datetime.now().strftime('%Y%m%d%H')
+
+def disconnect():
+    # adb disconnect 192.168.1.101:5555
+    tcp_devices = get_tcp_devices()
+    if tcp_devices:
+        for device in tcp_devices:
+            adbshell = f"adb disconnect {device}"
+            print(adbshell)
+            os.system(adbshell)
+    else:
+        printC("#未找到通过TCP连接的设备，无法执行命令")
+
 
 def execute(cmd):
     tcp_devices = get_tcp_devices()
@@ -210,8 +224,8 @@ def wx_new ():
     
     # 防止发送失败不继续执行
     try:
-        
-        sendEmail()
+        print('# sendEmail')
+        # sendEmail()
         
     except Exception as e:
         printC("#email error :{e}")
@@ -226,7 +240,7 @@ def saveTolocal ():
         execute('screencap -p /sdcard/'+getCurrentTimeStr()+'.png')
         tm.sleep(10)
         executepull()
-        os.system("adb pull /sdcard/"+getCurrentTimeStr()+".png D:\dkimg")
+        # os.system("adb pull /sdcard/"+getCurrentTimeStr()+".png D:\dkimg")
     except Exception as e:
         printC(f"saveTolocal fail：{e}")
         errorBegin ()
@@ -285,6 +299,7 @@ def sendEmail ():
     sender_password = '****'
     receiver_email = '****@qq.com'
 
+
     # 设置邮件主题和内容
     subject = "打卡"
     body = "结果"
@@ -296,21 +311,22 @@ def sendEmail ():
     msg['From'] = Header(sender_email)
     msg['To'] = Header(receiver_email)
     msg['Subject'] = Header(subject)
-    image_path = "D:\\dkimg\\" +getCurrentTimeStr()+".png"
+    # image_path = "D:\\dkimg\\" +getCurrentTimeStr()+".png"
     # 读取图片并添加到邮件中 
-    with open(image_path, 'rb') as f:
+    # with open(image_path, 'rb') as f:
               
-        img = MIMEImage(f.read())
-        # 可以设置图片的CID，用于在HTML中引用
-        img.add_header('Content-Disposition', 'attachment', filename=os.path.basename(image_path))
-        msg.attach(img)
-        msg.attach(MIMEText('成功', 'plain', 'utf-8'))
-        tm.sleep(5)
+    #     img = MIMEImage(f.read())
+    #     # 可以设置图片的CID，用于在HTML中引用
+    #     img.add_header('Content-Disposition', 'attachment', filename=os.path.basename(image_path))
+    #     msg.attach(img)
+    #     msg.attach(MIMEText('成功', 'plain', 'utf-8'))
+    #     tm.sleep(5)
 
     # 发送邮件
     try:
-        printC("#set email SMTP")
-        server = smtplib.SMTP_SSL('smtp.exmail.qq.com', 465 , timeout=10)
+        printC("#set email SMTP") 
+        server = smtplib.SMTP_SSL('smtp.139.com',465)
+        # server.starttls() 
         printC("#login email")
         server.login(sender_email, sender_password)
         tm.sleep(5)
@@ -329,7 +345,7 @@ def sendEmail ():
 
 
     except Exception as e:
-        printC("#email error :{e}")
+        printC(f"#email error :{e}")
         tm.sleep(5)
         # sendEmail ()
 

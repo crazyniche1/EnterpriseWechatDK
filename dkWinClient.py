@@ -32,8 +32,13 @@ def update_battery_label():
 
 
 def dksTask ():
-    # print('dksTask')
-     dk.task()
+    thread.Thread(target= dk.task).start()
+
+def send_email ():
+    dk.sendEmail()
+
+def disconnect ():
+    thread.Thread(target= dk.disconnect).start()
 
 def wifiConnect ():
     thread.Thread(target= wifiConnectByThread).start()
@@ -41,7 +46,6 @@ def wifiConnect ():
 
 def wifiConnectByThread ():
     output_str = batteryLevel.execute1('scrcpy --tcpip')
-    # print('dksTask'+output_str)
 
 delayedMin = 1
 
@@ -74,23 +78,31 @@ label = tk.Label(root,
                  pady= 10 ,
                                   
                  )
-label.pack()
+# label.pack()
+
+label.grid(row=0, column=0, sticky=tk.N+tk.W, padx=5, pady=5)
 
 Button = tk.Button(root, text="wifi connect",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = wifiConnect)
-Button.pack(padx=10,pady=10)
+Button.grid(row=1, column=0, sticky=tk.N+tk.W, padx=5, pady=5)
 
 Button1 = tk.Button(root, text="begin",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = dksTask)              
-Button1.pack()
+Button1.grid(row=1, column=1, sticky=tk.N+tk.W, padx=5, pady=5)
 
-Button2 = tk.Button(root, text="refresh",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = update_battery_label)
-Button2.pack(padx=10,pady=10)
+Button2 = tk.Button(root, text="refresh",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = update_battery_label＿Thread)
+Button2.grid(row=2, column=0, sticky=tk.N+tk.W, padx=5, pady=5)
+
+Button3 = tk.Button(root, text="disconnect",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = disconnect)
+# Button3.pack(padx=10,pady=10)
+Button3.grid(row=2, column=1, sticky=tk.N+tk.W, padx=5, pady=5)
 
 entry_var = tk.StringVar(value= delayedMin )
 Entry = tk.Entry(root, bd =1, textvariable=entry_var )
-Entry.pack(padx=10,pady=10,side = tk.RIGHT)
+# Entry.pack(padx=10,pady=10,side = tk.RIGHT)
+Entry.grid(row=3, column=0, sticky=tk.N+tk.W, padx=15, pady=15)
 
-Button3 = tk.Button(root, text="delayed",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = delayThread)
-Button3.pack(padx=10,pady=10,side = tk.LEFT)
+Button4 = tk.Button(root, text="delayed",bg="#F0F0F0", width=10,   padx= 40 , pady= 10 ,command = delayThread)
+# Button3.pack(padx=10,pady=10,side = tk.LEFT)
+Button4.grid(row=3, column=1, sticky=tk.N+tk.W, padx=5, pady=5)
 
 
 
@@ -102,7 +114,7 @@ def hitErrorDL ():
 # 设置窗口始终在最前
 root.attributes('-topmost', True)
 
-update_battery_label()
+update_battery_label＿Thread()
 
 # 启动主循环
 root.mainloop()

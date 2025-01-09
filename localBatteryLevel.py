@@ -40,7 +40,7 @@ def get_tcp_devices():
 
         return tcp_devices
     except subprocess.CalledProcessError as e:
-        print(f"获取设备列表出错: {e}")
+        # print(f"获取设备列表出错: {e}")
         return []
     
     
@@ -68,7 +68,7 @@ def get_device_battery_level():
             battery_level = match.group(1)
             return int(battery_level)
         else:
-            print("Could not find battery level information.")
+            # print("Could not find battery level information.")
             return None
     except subprocess.CalledProcessError as e:
         print(f"获取电量信息出错: {e}")
