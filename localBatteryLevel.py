@@ -6,19 +6,25 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
 import re
 
-def task():
-    print('task')
+# def task():
+    
+    # # print('task')
 
 def execute(cmd):
     tcp_devices = get_tcp_devices()
-    if tcp_devices:
-        for device in tcp_devices:
-            adbshell = f"adb -s {device} shell {cmd}"
-            return execute1(adbshell)
-    else:
-        print("未找到通过TCP连接的设备，无法执行命令")
+    try:
+        if tcp_devices:
+            for device in tcp_devices:
+                adbshell = f"adb -s {device} shell {cmd}"
+                return execute1(adbshell)
+        else:
+            # print("未找到通过TCP连接的设备，无法执行命令")
+            return None
+    except Exception as e :
+        print(f"未找到通过TCP连接的设备，无法执行命令{e}")
         return None
 
+        
 def get_tcp_devices():
     try:
         output = subprocess.check_output(['adb', 'devices'])
@@ -40,7 +46,7 @@ def get_tcp_devices():
 
         return tcp_devices
     except subprocess.CalledProcessError as e:
-        # print(f"获取设备列表出错: {e}")
+        # # print(f"获取设备列表出错: {e}")
         return []
     
     
@@ -51,16 +57,19 @@ def execute1 (cmd ):
         result = subprocess.run(adbshell, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         
         # 输出命令的标准输出
-        # print(result.stdout)
+        print()
+        print(f"adbshell--{result.stdout}")
+        # # print(result.stdout)
         return result.stdout
     except subprocess.CalledProcessError as e:
         # 如果命令执行失败，捕获错误并输出
-        print("Command Error:")
-        print(e.stderr)
+        # print("Command Error:")
+        print(f"adbshell--{e}")
         return None
 
 def get_device_battery_level():
     try:
+        
         output_str = execute('dumpsys battery')
         match = re.search(r'level:\s*(\d+)', output_str)
         if match:
@@ -70,7 +79,7 @@ def get_device_battery_level():
         else:
             # print("Could not find battery level information.")
             return None
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         print(f"获取电量信息出错: {e}")
         return None
 
@@ -79,11 +88,11 @@ def get_device_status():
         #显示屏幕状态 ON 为亮屏，OFF 为息屏
         output_str = execute(' dumpsys power | findstr /R /C:"Display Power: state=" ')
         value = output_str.split('=')[-1].strip()
-        print(f"显示屏幕状态:{value}")
+        # print(f"显示屏幕状态:{value}")
         return value
        
     except Exception as e:
-        print(f"解析出错: {e}")
+        # print(f"解析出错: {e}")
         return None
     
 
@@ -93,19 +102,19 @@ def get_device_jiesuo():
         output_str =  execute(' dumpsys window | findstr "isStatusBarKeyguard" ')
         match = re.search(r'isStatusBarKeyguard=(\S+)', output_str)
         if match:
-            print(f"显示解锁状态:{match.group(1)}")
+            # print(f"显示解锁状态:{match.group(1)}")
             return match.group(1)
         else:
             return None
        
     except Exception as e:
-        print(f"解析出错: {e}")
+        # print(f"解析出错: {e}")
         return None 
 
 # if __name__ == '__main__':
     
 #     battery_level = get_device_battery_level()
-#     print(f"获取电量信息: {battery_level}%")
+#     # print(f"获取电量信息: {battery_level}%")
     
     
     

@@ -88,7 +88,7 @@ def addTask():
   
 def random_time_around_zao():
     random_hour = 9
-    lower_bound = time(random_hour, 9)
+    lower_bound = time(random_hour, 10)
     upper_bound = time(random_hour, 14)
 
     random_minute = random.randint(lower_bound.minute, upper_bound.minute)

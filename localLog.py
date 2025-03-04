@@ -39,7 +39,11 @@ logger.setLevel(logging.DEBUG)
 #     logger.info('这是一条调试信息（高级配置）')
     
 def infoLog (info):
-    logger.info(info)
+   
+    try:
+        logger.info(info)
+    except Exception as e:
+        logging.error(f"An error occurred: {e}", exc_info=True)
 
 # if __name__ == '__main__':
 #     log_()

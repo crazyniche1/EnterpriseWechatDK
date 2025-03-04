@@ -16,3 +16,4 @@
 - 2. 手机端安装termux，执行脚本 
 
 
+> pyinstaller --onefile --windowed --icon icondk.ico  dkWinClient.py

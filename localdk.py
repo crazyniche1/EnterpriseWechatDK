@@ -16,6 +16,8 @@ import subprocess
 import localBatteryLevel as batteryLevel
 import uiautomator2 as u2
 
+import dkNotification as notification
+
 
 def printC (_str):
     current_time = getCurrentTime ()
@@ -37,7 +39,7 @@ def disconnect():
     if tcp_devices:
         for device in tcp_devices:
             adbshell = f"adb disconnect {device}"
-            print(adbshell)
+            printC(adbshell)
             os.system(adbshell)
     else:
         printC("#未找到通过TCP连接的设备，无法执行命令")
@@ -48,7 +50,7 @@ def execute(cmd):
     if tcp_devices:
         for device in tcp_devices:
             adbshell = f"adb -s {device} shell {cmd}"
-            print(adbshell)
+            printC(adbshell)
             os.system(adbshell)
     else:
         printC("#未找到通过TCP连接的设备，无法执行命令")
@@ -61,10 +63,10 @@ def executepull():
         for device in tcp_devices:
             # os.system("adb pull /sdcard/"+getCurrentTimeStr()+".png D:\dkimg")
             adbshell = f"adb -s {device} pull /sdcard/"+getCurrentTimeStr()+".png D:\dkimg"
-            print(adbshell)
+            printC(adbshell)
             os.system(adbshell)
     else:
-        print("未找到通过TCP连接的设备，无法执行命令")
+        printC("未找到通过TCP连接的设备，无法执行命令")
 
 def get_tcp_devices():
     try:
@@ -87,7 +89,7 @@ def get_tcp_devices():
 
         return tcp_devices
     except subprocess.CalledProcessError as e:
-        print(f"获取设备列表出错: {e}")
+        printC(f"获取设备列表出错: {e}")
         return []  
 
 def unlockScreen ():
@@ -108,6 +110,7 @@ def unlockScreen ():
     if is_lock == 'true':
         hdScreen()
         unlockByInput ()
+        
     else:
         printC('#The screen is already unlocked')
 
@@ -205,7 +208,7 @@ def wx_new ():
     
     tm.sleep(10)
     button_text = button_area_dk_text()
-    print(f'ka cacel:{button_text}')
+    printC(f'ka cacel:{button_text}')
     if d(text=button_text).exists:
         d(text=button_text).click()
     
@@ -224,7 +227,7 @@ def wx_new ():
     
     # 防止发送失败不继续执行
     try:
-        print('# sendEmail')
+        printC('# sendEmail')
         # sendEmail()
         
     except Exception as e:
@@ -269,9 +272,17 @@ def task():
 
 def task2():
     printC("$Perform a task2------")
-    execute("input keyevent 224")
+    device_status = batteryLevel.get_device_status()
+    if device_status == 'OFF':
+        LockScreen()
     hdScreen()
-    execute("input keyevent 224")
+    if device_status == 'ON':
+        LockScreen()
+
+    battery_level = batteryLevel.get_device_battery_level()
+    print(battery_level)
+    if battery_level is not None and  battery_level < 30:
+        notification.win_notification(battery_level)
     
 
 
@@ -283,13 +294,13 @@ def execute1 (cmd ):
         result = subprocess.run(adbshell, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         
         # 输出命令的标准输出
-        print("Command Output:")
-        print(result.stdout)
+        printC("Command Output:")
+        printC(result.stdout)
         
     except subprocess.CalledProcessError as e:
         # 如果命令执行失败，捕获错误并输出
-        print("Command Error:")
-        print(e.stderr)
+        printC("Command Error:")
+        printC(e.stderr)
 
 def sendEmail ():  
     printC('#send email')
