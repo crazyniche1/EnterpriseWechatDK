@@ -182,9 +182,15 @@ def wx_new ():
     d = connect()
     # 有时会有USB弹窗，点击取消
     printC('#点击取消')
-    button_text = '取消'
-    if d(text=button_text).exists:
-        d(text=button_text).click()
+
+    try:
+        button_text = '取消'
+        if d(text=button_text).exists:
+            d(text=button_text).click()
+        
+    except Exception as e:
+        printC("#cacel error :{e}")
+    
 
     # 关闭App
     d.app_stop(package_name)

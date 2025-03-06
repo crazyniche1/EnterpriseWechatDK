@@ -88,15 +88,15 @@ def addTask():
   
 def random_time_around_zao():
     random_hour = 9
-    lower_bound = time(random_hour, 10)
-    upper_bound = time(random_hour, 14)
+    lower_bound = time(random_hour, 15)
+    upper_bound = time(random_hour, 20)
 
     random_minute = random.randint(lower_bound.minute, upper_bound.minute)
     return datetime.combine(datetime.today(), time(random_hour, random_minute))
 
 def random_time_around_wan():
     random_hour  = 18
-    lower_bound = time(random_hour, 45)
+    lower_bound = time(random_hour, 50)
     upper_bound = time(random_hour, 59)
 
 
