@@ -133,8 +133,8 @@ def setup_job():
 
 def random_time_around_zao_m():
     random_hour = 9
-    lower_bound = time(random_hour, 1)
-    upper_bound = time(random_hour, 15)
+    lower_bound = time(random_hour, 15)
+    upper_bound = time(random_hour, 20)
     random_minute = random.randint(lower_bound.minute, upper_bound.minute)
     # 获取今天的日期并加上一天得到明天的日期
     tomorrow_date = datetime.today() + timedelta(days=1)
@@ -142,7 +142,7 @@ def random_time_around_zao_m():
 
 def random_time_around_wan_m():
     random_hour  = 18
-    lower_bound = time(random_hour, 45)
+    lower_bound = time(random_hour, 50)
     upper_bound = time(random_hour, 59)
     random_minute = random.randint(lower_bound.minute, upper_bound.minute)
     # 获取今天的日期并加上一天得到明天的日期

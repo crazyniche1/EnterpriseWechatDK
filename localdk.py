@@ -114,7 +114,10 @@ def unlockScreen ():
     else:
         printC('#The screen is already unlocked')
 
-    wx_new ()
+    try:
+        wx_new ()
+    except Exception as e:
+        printC("#wx_new error :{e}")
     
 def unlockByInput ():
     execute("input mouse tap 542 1382")
@@ -183,14 +186,10 @@ def wx_new ():
     # 有时会有USB弹窗，点击取消
     printC('#点击取消')
 
-    try:
-        button_text = '取消'
-        if d(text=button_text).exists:
-            d(text=button_text).click()
-        
-    except Exception as e:
-        printC("#cacel error :{e}")
     
+    button_text = '取消'
+    if d(text=button_text).exists:
+        d(text=button_text).click()
 
     # 关闭App
     d.app_stop(package_name)
@@ -285,10 +284,10 @@ def task2():
     if device_status == 'ON':
         LockScreen()
 
-    battery_level = batteryLevel.get_device_battery_level()
-    print(battery_level)
-    if battery_level is not None and  battery_level < 30:
-        notification.win_notification(battery_level)
+    # battery_level = batteryLevel.get_device_battery_level()
+    # print(battery_level)
+    # if battery_level is not None and  battery_level < 30:
+    #     notification.win_notification(battery_level)
     
 
 
